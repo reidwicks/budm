@@ -28,7 +28,7 @@ do
 			is_valid=0
 		fi	
 	done
-	if [[ is_valid -eq 1 ]]; then
+	if [[ $is_valid -eq 1 ]]; then
 		valid_drives="$valid_drives $i"
 	fi
 done
