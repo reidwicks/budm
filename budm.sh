@@ -17,7 +17,7 @@ zenity --warning --title="Warning!" --text="This program is a beta. Please proce
 
 #get list of all drives (not partitions) that are NOT mounted.  Very likely we do not want to format those ones.
 
-mounted_drives=$(df -h | sed -ne '/^\/dev/ s/[0-9].*//gp')
+mounted_drives=$( df -h | sed -ne '/^\/dev/ s/[0-9].*//gp' )
 list=""
 for i in $(ls /dev/sd?)
 do
@@ -46,7 +46,7 @@ fi
 <<<<<<< HEAD
 drive=$( zenity  --list --title="Disk selection" --text "Pick disk to flash:" --radiolist  --column "" --column "Disk" $drive_choices )
 =======
-drive=$(zenity  --list  --text "Pick disk to flash:" --radiolist  --column "" --column "Disk" $list)
+drive=$( zenity  --list  --text "Pick disk to flash:" --radiolist  --column "" --column "Disk" $list )
 >>>>>>> ddc10ea582d27a32f46367c080153949aaca9b35
 iso=$( zenity --file-selection --title="Please select the .iso you want to burn" --file-filter=*.iso )
 
