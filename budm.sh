@@ -18,7 +18,7 @@ zenity --warning --title="Warning!" --text="This program is a beta. Please proce
 #get list of all drives (not partitions) that are NOT mounted.  Very likely we do not want to format those ones.
 
 mounted_drives=$(df -h | sed -ne '/^\/dev/ s/[0-9].*//gp')
-valid_drives=""
+list=""
 for i in $(ls /dev/sd?)
 do
 	is_valid=1
@@ -29,22 +29,25 @@ do
 		fi	
 	done
 	if [[ $is_valid -eq 1 ]]; then
-		valid_drives="$valid_drives $i"
+		list="$list FALSE $i"
 	fi
 done
 
 
+echo $list
+
 #exit if there are no valid drives
-if [ -z $valid_drives ]; then
+if [ -z "$list" ]; then
 	zenity --warning --title="Warning!" --text="To flash a disk, there must be at least one unmounted disk present.  Please be sure to eject the drive you wish to flash."
 	exit 1
 fi
 
-# add a second column to each entry for zenity to display properly
-drive_choices=$(echo $valid_drives | sed -ne 's/^/FALSE /p')
 
-
+<<<<<<< HEAD
 drive=$( zenity  --list --title="Disk selection" --text "Pick disk to flash:" --radiolist  --column "" --column "Disk" $drive_choices )
+=======
+drive=$(zenity  --list  --text "Pick disk to flash:" --radiolist  --column "" --column "Disk" $list)
+>>>>>>> ddc10ea582d27a32f46367c080153949aaca9b35
 iso=$( zenity --file-selection --title="Please select the .iso you want to burn" --file-filter=*.iso )
 
 #make sure they actually selected something...
