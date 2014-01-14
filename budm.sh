@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# budm version 0.2.2
+# budm version 0.3
 # copyright 2014 Reid Wicks under GPLv3
 # That's there because I think I need to put it there.
 
@@ -13,7 +13,7 @@
 
 # tweaked by Troy Denton on a whim.  Now contains basic input validation, and only allows you to select an unmounted drive.
 
-#zenity --warning --title="Warning!" --text="This program is a beta, and lacks the functionality to select drives. Running this program will erase the contents of /dev/sdb. If you do not wish to erase this volume, or do not know what this means, please close this program."
+zenity --warning --title="Warning!" --text="This program is a beta. Please proceed at your own risk. Use of this program may result in data loss. If you aren't willing to risk it, or do not understand the risks, please close this program."
 
 #get list of all drives (not partitions) that are NOT mounted.  Very likely we do not want to format those ones.
 
@@ -60,8 +60,6 @@ zenity --info --title="Filename" --text="The file you selected is $iso."
 
 
 #TODO comment below :)
-
-exit
 
 sudo mkfs.vfat -I $drive && sudo dd if="$iso" of=$drive oflag=direct bs=10M | zenity --progress --title="Creating bootable USB device" --text="The creation of your bootable USB device is in progress..." --pulsate
 zenity --info --title="Done!" --text="Your drive, created from file \"$iso\", is now bootable!"
