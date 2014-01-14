@@ -44,7 +44,7 @@ fi
 drive_choices=$(echo $valid_drives | sed -ne 's/^/FALSE /p')
 
 
-drive=$(zenity  --list  --text "Pick disk to flash:" --radiolist  --column "" --column "Disk" $drive_choices)
+drive=$( zenity  --list --title="Disk selection" --text "Pick disk to flash:" --radiolist  --column "" --column "Disk" $drive_choices )
 iso=$( zenity --file-selection --title="Please select the .iso you want to burn" --file-filter=*.iso )
 
 #make sure they actually selected something...
@@ -61,6 +61,6 @@ zenity --info --title="Filename" --text="The file you selected is $iso."
 
 #TODO comment below :)
 
-sudo mkfs.vfat -I $drive && sudo dd if="$iso" of=$drive oflag=direct bs=10M | zenity --progress --title="Creating bootable USB device" --text="The creation of your bootable USB device is in progress..." --pulsate
+sudo mkfs.vfat -I $drive && sudo dd if="$iso" of=$drive oflag=direct bs=10M | zenity --progress --title="Creating bootable USB device" --text="The creation of your bootable USB device is in progress..." --pulsate --auto-close
 zenity --info --title="Done!" --text="Your drive, created from file \"$iso\", is now bootable!"
 exit 0
