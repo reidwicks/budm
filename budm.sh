@@ -67,7 +67,34 @@ zenity --info --title="Filename" --text="The file you selected is $iso."
 
 sudo mkfs.vfat -I $drive  | zenity --progress --title="Creating bootable USB device"  --text="Writing partition table..." --pulsate --auto-close --auto-kill
 
-sudo dd if="$iso" of=$drive oflag=direct bs=10M | zenity --progress --title="Creating bootable USB device" --text="Writing image..." --pulsate --auto-kill --auto-close
+#sending USR1 to dd gives the following output: 
+#3844+0 records in
+#3844+0 records out
+#4030726144 bytes (4.0 GB) copied, 63.9448 s, 63.0 MB/s
+
+#we can get progress in percentage by using awk and knowing the filesize
+
+filesize=$(du -b "$iso")
+progress=0
+
+#let this run in background, get pid
+#sudo dd if="$iso" of=$drive oflag=direct bs=10M | zenity --progress --title="Creating bootable USB device" --text="Writing image..." --auto-kill --auto-close &
+sudo dd if="$iso" of=$drive oflag=direct bs=10M &
+
+
+#ddpid=$(ps -o pid,command  | grep "dd if=\"$iso\"" | grep -v grep )
+ddpid=$(ps -eo pid,command  | grep "dd if=\"$iso\"" | grep -v grep | awk '{print $1}')
+echo "ddpid is $ddpid"
+
+while true
+do
+	#echo "kill -USR1 $ddpid"
+	ddpid=$(ps -eo pid,command  | grep "dd if=\"$iso\"" | grep -v grep )
+	echo "ddpid is $ddpid"
+	sleep 1
+done;
+
+
 zenity --info --title="Done!" --text="Your drive, created from file \"$iso\", is now bootable!"
 exit 0
 
